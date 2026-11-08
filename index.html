@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Counter-Strike Classic — Browser Remake</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="game"></div>
+  <div id="menu" class="overlay">
+    <div class="panel">
+      <div class="eyebrow">BROWSER PROTOTYPE</div>
+      <h1>COUNTER-STRIKE<br><span>CLASSIC</span></h1>
+      <p>A small, original CS 1.6-inspired arena prototype.</p>
+      <button id="start">PLAY</button>
+      <div class="help">
+        <span><b>WASD</b> move</span><span><b>MOUSE</b> aim</span>
+        <span><b>LEFT CLICK</b> fire</span><span><b>R</b> reload</span>
+        <span><b>1–4</b> switch weapon</span><span><b>ESC</b> pause</span>
+      </div>
+      <small>Use headphones for the best experience. Internet is required to load Three.js.</small>
+    </div>
+  </div>
+  <div id="pause" class="overlay hidden">
+    <div class="panel compact">
+      <h2>PAUSED</h2>
+      <button id="resume">RESUME</button>
+      <button id="restart" class="secondary">RESTART ROUND</button>
+    </div>
+  </div>
+  <div id="hud">
+    <div class="topline"><span class="team">TERRORISTS</span><span id="round">ROUND 1</span><span class="team ct">COUNTER-TERRORISTS</span></div>
+    <div class="crosshair"><i></i><i></i><i></i><i></i></div>
+    <div class="left-hud">
+      <div class="stat"><label>HEALTH</label><strong id="health">100</strong></div>
+      <div class="stat"><label>ARMOR</label><strong id="armor">100</strong></div>
+      <div class="stat"><label>MONEY</label><strong id="money">$800</strong></div>
+    </div>
+    <div class="right-hud">
+      <div id="weapon-name">AK-47</div>
+      <div class="ammo"><strong id="ammo">30</strong><span>/</span><span id="reserve">90</span></div>
+      <div id="status">ELIMINATE THE BOTS</div>
+    </div>
+    <div id="hitmarker">✕</div>
+    <div id="toast"></div>
+    <div id="score">BOTS: <b id="bots">4</b></div>
+  </div>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
