@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111416">
+  <title>Counter-Strike Classic — Browser Remake</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div id="game"></div>
+  <div id="boot-error" class="overlay hidden" role="alert">
+    <div class="panel">
+      <div class="eyebrow">STARTUP ERROR</div>
+      <h2>THE GAME COULD NOT LOAD</h2>
+      <p id="boot-error-text">Three.js could not be loaded.</p>
+      <p class="error-help">Check your internet connection, then refresh the page. If you are using GitHub Pages, make sure the files are in the repository root.</p>
+      <button onclick="location.reload()">TRY AGAIN</button>
+    </div>
+  </div>
+  <div id="menu" class="overlay">
+    <div class="panel">
+      <div class="eyebrow">BROWSER PROTOTYPE</div>
+      <h1>COUNTER-STRIKE<br><span>CLASSIC</span></h1>
+      <p>A small, original CS 1.6-inspired arena prototype.</p>
+      <button id="start">PLAY</button>
+      <div class="help">
+        <span><b>WASD</b> move</span><span><b>MOUSE</b> aim</span>
+        <span><b>LEFT CLICK</b> fire</span><span><b>R</b> reload</span>
+        <span><b>1–4</b> switch weapon</span><span><b>ESC</b> pause</span>
+      </div>
+      <small>Click PLAY, then allow mouse capture. Internet is required to load Three.js.</small>
+    </div>
+  </div>
+  <div id="pause" class="overlay hidden">
+    <div class="panel compact">
+      <h2 id="pause-title">PAUSED</h2>
+      <p id="pause-help">Click RESUME to capture the mouse again.</p>
+      <button id="resume">RESUME</button>
+      <button id="restart" class="secondary">RESTART ROUND</button>
+    </div>
+  </div>
+  <div id="hud">
+    <div class="topline"><span class="team">TERRORISTS</span><span id="round">ROUND 1</span><span class="team ct">COUNTER-TERRORISTS</span></div>
+    <div class="crosshair"><i></i><i></i><i></i><i></i></div>
+    <div class="left-hud">
+      <div class="stat"><label>HEALTH</label><strong id="health">100</strong></div>
+      <div class="stat"><label>ARMOR</label><strong id="armor">100</strong></div>
+      <div class="stat"><label>MONEY</label><strong id="money">$800</strong></div>
+    </div>
+    <div class="right-hud">
+      <div id="weapon-name">AK-47</div>
+      <div class="ammo"><strong id="ammo">30</strong><span>/</span><span id="reserve">90</span></div>
+      <div id="status">ELIMINATE THE BOTS</div>
+    </div>
+    <div id="hitmarker">✕</div>
+    <div id="toast"></div>
+    <div id="score">BOTS: <b id="bots">4</b></div>
+  </div>
+  <script type="module">
+    const urls = [
+      'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js',
+      'https://unpkg.com/three@0.160.0/build/three.module.js'
+    ];
+    let THREE = null;
+    let lastError = null;
+    for (const url of urls) {
+      try {
+        THREE = await import(url);
+        break;
+      } catch (error) {
+        lastError = error;
+        console.warn('Three.js CDN failed:', url, error);
+      }
+    }
+    if (THREE) {
+      window.THREE = THREE;
+      try {
+        await import('./src/main.js');
+      } catch (error) {
+        console.error(error);
+        const box = document.querySelector('#boot-error');
+        document.querySelector('#boot-error-text').textContent = error.message || 'An unexpected error occurred while starting the game.';
+        box.classList.remove('hidden');
+      }
+    } else {
+      console.error(lastError);
+      document.querySelector('#boot-error-text').textContent = 'The game could not download Three.js from either CDN. Check your connection or network restrictions, then refresh.';
+      document.querySelector('#boot-error').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
